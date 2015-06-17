@@ -13,7 +13,7 @@ stages:
       -
         type: builder
         name: Build
-        extension_id: 1079f55ce434b4f6c87e72c79a184e01
+        extension_id: ibm.devops.services.pipeline.container.builder
         target:
           url: ${CF_TARGET_URL}
           organization_guid: ${CF_ORGANIZATION_ID}
@@ -35,7 +35,7 @@ stages:
       -
         type: deployer
         name: Deploy
-        extension_id: 1079f55ce434b4f6c87e72c79a0fb94d
+        extension_id: ibm.devops.services.pipeline.docker.deploy.ice
         target:
           url: ${CF_TARGET_URL}
           organization_guid: ${CF_ORGANIZATION_ID}
