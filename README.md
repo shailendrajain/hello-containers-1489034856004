@@ -2,7 +2,7 @@
 
 Press this button, to get your own copy of the sample running in Bluemix !
 
-[![Deploy To Bluemix](https://bluemix.net/deploy/button.png)](https://qa.hub.jazz.net/deploy/index.html?repository=https://github.com/rjminsha/d2bm-container-test.git)
+[![Deploy To Bluemix](https://bluemix.net/deploy/button.png)](https://qa.hub.jazz.net/deploy/index.html?repository=https://github.com/Puquios/d2bm-container-helloworld.git)
 
 ## Overview 
 IBM DevOps Services has a Continuous Delivery Pipeline for deploying Cloud Foundry Applications, Containers, and micro-services to IBM Bluemix.  The pipeline now supports a pipeline.yml textual representaiton.  This makes it very easy to share and copy interesting pipelines.  The Deploy to Bluemix button provides a simple way to clone a project including the source and the delivery pipeline.  
