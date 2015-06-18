@@ -1,4 +1,4 @@
-# Deploy to Bluemix - Pipeline for helloworld node application 
+# Example pipeline for helloworld node application 
 
 Press this button, to get your own copy of the sample running in Bluemix !
 
