@@ -1,6 +1,8 @@
 # Example pipeline for helloworld node application 
+Bluemix Containers have gone live!  Before you start with this example you need to setup a namespace.  The namespace is set for each organization and will be used for your image repositories names in your organizations private Container Registry.  To setup a namespace, simply login to [Bluemix](https://bluemix.net), and click ![Start Containers](start-containers.jpg).  
+If you have not setup a namespace you will be asked to.  Even if you were a beta participant you will need to create a new namespace.  
 
-Press this button, to get your own copy of the sample running in Bluemix !
+Now press this button, to get your own copy of the sample running in Bluemix !
 
 [![Deploy To Bluemix](https://bluemix.net/deploy/button.png)](https://hub.jazz.net/deploy/index.html?repository=https://github.com/Puquios/hello-containers.git)
 
