@@ -26,21 +26,28 @@ stages:
       \ tests cases have been checked in ${no_color}\"\n\n######################################\n\
       # Build Container via Dockerfile     #\n######################################\n\
       \n# REGISTRY_URL=${CCS_REGISTRY_HOST}/${NAMESPACE}\n# FULL_REPOSITORY_NAME=${REGISTRY_URL}/${IMAGE_NAME}:${APPLICATION_VERSION}\n\
-      \nif [ -f Dockerfile ]; then \n    echo -e \"${label_color}Building ${FULL_REPOSITORY_NAME}\
-      \ ${no_color}\"\n    BUILD_COMMAND=\"\"\n    if [ \"${USE_CACHED_LAYERS}\" ==\
-      \ \"true\" ]; then \n        BUILD_COMMAND=\"ice build --pull --tag ${FULL_REPOSITORY_NAME}\
-      \ ${WORKSPACE}\"\n        ${BUILD_COMMAND}\n        RESULT=$?\n    else \n \
-      \       BUILD_COMMAND=\"ice build --no-cache --tag ${FULL_REPOSITORY_NAME} ${WORKSPACE}\"\
-      \n        ${BUILD_COMMAND}\n        RESULT=$?\n    fi \n\n    if [ $RESULT -ne\
-      \ 0 ]; then\n        echo -e \"${red}Error building image ${no_color}\" | tee\
-      \ -a \"$ERROR_LOG_FILE\"\n        echo \"Build command: ${BUILD_COMMAND}\"\n\
+      # If you wish to receive slack notifications, set SLACK_WEBHOOK_PATH as a property\
+      \ on the stage.\n\n\n# Possible adding retries to build the image\nif [ -f Dockerfile\
+      \ ]; then \n    echo -e \"${label_color}Building ${FULL_REPOSITORY_NAME} ${no_color}\"\
+      \n    ${EXT_DIR}/utilities/sendMessage.sh -l info -m \"New container build requested\
+      \ for ${FULL_REPOSITORY_NAME}\"\n    # build image\n    BUILD_COMMAND=\"\"\n\
+      \    if [ \"${USE_CACHED_LAYERS}\" == \"true\" ]; then \n        BUILD_COMMAND=\"\
+      build --pull --tag ${FULL_REPOSITORY_NAME} ${WORKSPACE}\"\n        ice_retry\
+      \ ${BUILD_COMMAND}\n        RESULT=$?\n    else \n        BUILD_COMMAND=\"build\
+      \ --no-cache --tag ${FULL_REPOSITORY_NAME} ${WORKSPACE}\"\n        ice_retry\
+      \ ${BUILD_COMMAND}\n        RESULT=$?\n    fi \n\n    if [ $RESULT -ne 0 ];\
+      \ then\n        echo -e \"${red}Error building image ${no_color}\" | tee -a\
+      \ \"$ERROR_LOG_FILE\"\n        echo \"Build command: ice ${BUILD_COMMAND}\"\n\
       \        ice info \n        ice images\n        ${EXT_DIR}/print_help.sh\n \
-      \       exit 1\n    else\n        echo -e \"${green}Container build of ${FULL_REPOSITORY_NAME}\
-      \ was successful ${no_color}\"\n    fi  \nelse \n    echo -e \"${red}Dockerfile\
-      \ not found in project${no_color}\"\n    exit 1\nfi  \n\n########################################################################################\n\
-      # Copy any artifacts that will be needed for deployment and testing to $archive_dir\
-      \    #\n########################################################################################\n\
-      echo \"IMAGE_NAME=${FULL_REPOSITORY_NAME}\" >> ${ARCHIVE_DIR}/build.properties"
+      \       ${EXT_DIR}/utilities/sendMessage.sh -l bad -m \"Container build of ${FULL_REPOSITORY_NAME}\
+      \ failed\"\n        exit 1\n    else\n        ${EXT_DIR}/utilities/sendMessage.sh\
+      \ -l good -m \"Container build of ${FULL_REPOSITORY_NAME} was successful\"\n\
+      \        echo -e \"${green}Container build of ${FULL_REPOSITORY_NAME} was successful\
+      \ ${no_color}\"\n    fi  \nelse \n    echo -e \"${red}Dockerfile not found in\
+      \ project${no_color}\"\n    exit 1\nfi  \n\n######################################################################################\n\
+      # Copy any artifacts that will be needed for deployment and testing to $WORKSPACE\
+      \    #\n######################################################################################\n\
+      echo \"IMAGE_NAME=${FULL_REPOSITORY_NAME}\" >> $ARCHIVE_DIR/build.properties"
 - name: Deploy
   inputs:
   - type: job
